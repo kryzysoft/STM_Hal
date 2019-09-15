@@ -3,6 +3,7 @@
 #include "GUI.h"
 #include "WM.h"
 #include "dialog.h"
+#include "stm32f7xx_hal.h"
 
 extern "C" void GRAPHICS_HW_Init(void);
 
@@ -26,11 +27,14 @@ extern "C" void GRAPHICS_HW_Init(void);
 
 #define LISTVIEW_ROW_HEIGHT 20
 
+extern LTDC_HandleTypeDef            hltdc;
 
 void StemWinGraphics::StemWinGraphics::Init()
 {
   GRAPHICS_HW_Init();
   GUI_Init();
+
+  HAL_LTDC_ProgramLineEvent(&hltdc, 0);
 //  WM_MULTIBUF_Enable(1);
   WM_SetCreateFlags(WM_CF_MEMDEV);
   setSkin();
