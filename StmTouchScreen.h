@@ -6,7 +6,7 @@
 class StmTouchScreen: public IHalTouchScreen
 {
   public:
-  	StmTouchScreen();
+  	void Init();
     virtual TouchPosition GetTouchPosition();
     virtual bool IsTouched();
 };

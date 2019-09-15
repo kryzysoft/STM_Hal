@@ -1,16 +1,18 @@
 #include "StmTouchScreen.h"
 #include "stm32746g_discovery_ts.h"
 
-StmTouchScreen::StmTouchScreen()
+void StmTouchScreen::Init()
 {
-	BSP_TS_Init(480,272);
+  BSP_TS_Init(480,272);
 }
 
 TouchPosition StmTouchScreen::GetTouchPosition()
 {
-	TouchPosition tp;
-	tp.x = 0;
-	tp.y = 0;
+  TS_StateTypeDef ts;
+  BSP_TS_GetState(&ts);
+  TouchPosition tp;
+  tp.x = ts.touchX[0];
+  tp.y = ts.touchY[0];
 	return tp;
 }
 
