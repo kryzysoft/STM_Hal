@@ -8,7 +8,7 @@
 extern "C" void GRAPHICS_HW_Init(void);
 
 #define PALETTE_1 0xD0D0D0
-#define PALETTE_2 0xD08080
+#define PALETTE_2 0xC07070
 #define PALETTE_3 0xA0A0A0
 
 #define BACKGROUND_COLOR PALETTE_1
@@ -17,7 +17,7 @@ extern "C" void GRAPHICS_HW_Init(void);
 #define MID_COLOR ((MIN_COLOR + MAX_COLOR)/2)
 #define FONT_COLOR GUI_BLACK
 
-#define LOWER_1 PALETTE_2
+#define LOWER_1 (PALETTE_2)
 #define LOWER_0 (LOWER_1 + 0x0c0c0c)
 #define UPPER_1 (LOWER_0 + 0x070707)
 #define UPPER_0 (UPPER_1 + 0x0c0c0c)
@@ -35,8 +35,7 @@ void StemWinGraphics::StemWinGraphics::Init()
   GUI_Init();
 
   HAL_LTDC_ProgramLineEvent(&hltdc, 0);
-//  WM_MULTIBUF_Enable(1);
-  WM_SetCreateFlags(WM_CF_MEMDEV);
+  WM_MULTIBUF_Enable(1);
   setSkin();
   BUTTON_SetReactOnTouch();
 }
@@ -83,10 +82,7 @@ void StemWinGraphics::setButtonSkin()
 {
   BUTTON_SKINFLEX_PROPS buttonProps;
 
-BUTTON_SetDefaultFont(&GUI_Font8_ASCII);
-//  BUTTON_SetDefaultFont(&GUI_FontTimesNewRoman13);
-
-
+  BUTTON_SetDefaultFont(&GUI_Font8_ASCII);
 
   buttonProps.aColorFrame[0] = FRAME_0;
   buttonProps.aColorFrame[1] = FRAME_1;
@@ -100,12 +96,13 @@ BUTTON_SetDefaultFont(&GUI_Font8_ASCII);
   BUTTON_SetSkinFlexProps(&buttonProps,BUTTON_SKINFLEX_PI_FOCUSSED);
   BUTTON_SetSkinFlexProps(&buttonProps,BUTTON_SKINFLEX_PI_DISABLED);
 
-  buttonProps.aColorUpper[0] += 0x101010;
-  buttonProps.aColorUpper[1] += 0x101010;
-  buttonProps.aColorLower[0] += 0x101010;
-  buttonProps.aColorLower[1] += 0x101010;
-  buttonProps.aColorFrame[0] += 0x101010;
-  buttonProps.aColorFrame[1] += 0x101010;
+  buttonProps.aColorUpper[0] += 0x202020;
+  buttonProps.aColorUpper[1] += 0x202020;
+  buttonProps.aColorLower[0] += 0x202020;
+  buttonProps.aColorLower[1] += 0x202020;
+  buttonProps.aColorFrame[0] += 0x202020;
+  buttonProps.aColorFrame[1] += 0x202020;
+  buttonProps.aColorFrame[2] = buttonProps.aColorLower[1];
   BUTTON_SetSkinFlexProps(&buttonProps,BUTTON_SKINFLEX_PI_PRESSED);
 
   BUTTON_SetDefaultTextColor(FONT_COLOR,BUTTON_CI_PRESSED);

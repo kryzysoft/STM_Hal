@@ -2,10 +2,34 @@
 #include "strings.h"
 #include "dialog.h"
 
+uint32_t STemWinWindowManager::buttonHandlersCount;
+ButtonHandlerItem STemWinWindowManager::buttonEventHandlers[MAX_BUTTONS_TOTAL];
+
+STemWinWindowManager::STemWinWindowManager():
+  m_width(0),
+  m_height(0)
+{
+}
 
 int32_t STemWinWindowManager::CreateWindow(int32_t x, int32_t y, int32_t width, int32_t height)
 {
-  return WINDOW_CreateEx(x,y,width,height,0,WM_CF_SHOW,0,GUI_ID_USER,&eventHandler);
+  return WINDOW_CreateEx(x,y,width,height,0,0,0,GUI_ID_USER,&eventHandler);
+}
+
+void STemWinWindowManager::Init(int32_t width, int32_t height)
+{
+  m_width = width;
+  m_height = height;
+}
+
+int32_t STemWinWindowManager::GetWidth()
+{
+  return m_width;
+}
+
+int32_t STemWinWindowManager::GetHeight()
+{
+  return m_height;
 }
 
 int32_t STemWinWindowManager::CreateText(int32_t parent, int32_t x, int32_t y, int32_t width, int32_t height, const char *text)
@@ -15,15 +39,19 @@ int32_t STemWinWindowManager::CreateText(int32_t parent, int32_t x, int32_t y, i
 
 void STemWinWindowManager::Execute()
 {
-//  WM_Exec();
   GUI_Exec();
-  GUI_Delay(1);
 }
 
-int32_t STemWinWindowManager::CreateButton(int32_t parent, int32_t x, int32_t y, int32_t width, int32_t height, const char *text)
+int32_t STemWinWindowManager::CreateButton(
+    int32_t parent, int32_t x, int32_t y,
+    int32_t width, int32_t height, const char *text,
+    IButtonEventHandler *buttonEventHandler)
 {
   BUTTON_Handle hButton = BUTTON_CreateEx(x, y, width, height, parent, WM_CF_SHOW, 0, GUI_ID_BUTTON0);
   BUTTON_SetText(hButton, text);
+  buttonEventHandlers[buttonHandlersCount].buttonHandle = hButton;
+  buttonEventHandlers[buttonHandlersCount].buttonEventHandler = buttonEventHandler;
+  buttonHandlersCount++;
   return hButton;
 }
 
@@ -39,7 +67,40 @@ void STemWinWindowManager::Untouch()
 
 void STemWinWindowManager::eventHandler(WM_MESSAGE * pMsg)
 {
-  WM_DefaultProc(pMsg);
+  switch (pMsg->MsgId)
+  {
+    case WM_NOTIFY_PARENT:
+      if(pMsg->Data.v == WM_NOTIFICATION_RELEASED)
+      {
+        buttonClicked(pMsg->hWinSrc);
+      }
+      break;
+    default:
+      WM_DefaultProc(pMsg);
+  }
+}
+
+void STemWinWindowManager::Show(int32_t windowHandle)
+{
+  WM_ShowWindow(windowHandle);
+  WM_BringToTop(windowHandle);
+}
+
+void STemWinWindowManager::Hide(int32_t windowHandle)
+{
+  WM_HideWindow(windowHandle);
+}
+
+void STemWinWindowManager::buttonClicked(int32_t buttonHandle)
+{
+  for(uint32_t i=0; i<buttonHandlersCount; i++)
+  {
+    if(buttonEventHandlers[i].buttonHandle == buttonHandle)
+    {
+      buttonEventHandlers[i].buttonEventHandler->ButtonEventHandler(buttonHandle);
+      break;
+    }
+  }
 }
 
 
