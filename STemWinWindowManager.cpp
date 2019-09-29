@@ -55,6 +55,32 @@ int32_t STemWinWindowManager::CreateButton(
   return hButton;
 }
 
+int32_t STemWinWindowManager::CreateListView(int32_t parent, int32_t x,
+    int32_t y, int32_t width, int32_t height)
+{
+  LISTVIEW_Handle hList = LISTVIEW_CreateEx(x, y, width, height,
+      parent, WM_CF_SHOW, 0, GUI_ID_LISTVIEW0);
+  HEADER_Handle hHeader = LISTVIEW_GetHeader(hList);
+
+  HEADER_SetDragLimit(hHeader,1);
+  HEADER_SetHeight(hHeader,LISTVIEW_ROW_HEIGHT);
+
+  LISTVIEW_SetAutoScrollV(hList,1);
+
+  return hList;
+}
+
+void STemWinWindowManager::AddColumnToListView(int32_t listViewHandle,
+    int32_t size, const char *name)
+{
+  LISTVIEW_AddColumn(listViewHandle,size,name,GUI_TA_HCENTER|GUI_TA_VCENTER);
+}
+
+void STemWinWindowManager::AddRowToListView(int32_t listViewHandle, const char **row)
+{
+  LISTVIEW_AddRow(listViewHandle, row);
+}
+
 void STemWinWindowManager::Touch(int32_t x, int32_t y)
 {
   GUI_TOUCH_StoreState(x, y);
