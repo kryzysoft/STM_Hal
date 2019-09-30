@@ -24,7 +24,7 @@ private:
 public:
   STemWinWindowManager();
   virtual void Init(int32_t width, int32_t height);
-  virtual int32_t CreateWindow(int32_t x, int32_t y, int32_t width, int32_t height);
+  virtual int32_t CreateWin(int32_t x, int32_t y, int32_t width, int32_t height);
   virtual int32_t CreateText(int32_t parent, int32_t x, int32_t y, int32_t width, int32_t height, const char *text);
   virtual int32_t CreateButton(
       int32_t parent, int32_t x, int32_t y,
@@ -41,7 +41,7 @@ public:
   virtual void Untouch();
   virtual void Show(int32_t windowHandle);
   virtual void Hide(int32_t windowHandle);
-  virtual void Execute();
+  virtual bool Execute();
 };
 
 #endif

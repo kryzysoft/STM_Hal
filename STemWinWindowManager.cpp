@@ -11,7 +11,7 @@ STemWinWindowManager::STemWinWindowManager():
 {
 }
 
-int32_t STemWinWindowManager::CreateWindow(int32_t x, int32_t y, int32_t width, int32_t height)
+int32_t STemWinWindowManager::CreateWin(int32_t x, int32_t y, int32_t width, int32_t height)
 {
   return WINDOW_CreateEx(x,y,width,height,0,0,0,GUI_ID_USER,&eventHandler);
 }
@@ -37,9 +37,10 @@ int32_t STemWinWindowManager::CreateText(int32_t parent, int32_t x, int32_t y, i
   return TEXT_CreateEx(x,y,width,height,parent,WM_CF_SHOW,TEXT_CF_HCENTER|TEXT_CF_VCENTER,GUI_ID_TEXT0,text);
 }
 
-void STemWinWindowManager::Execute()
+bool STemWinWindowManager::Execute()
 {
   GUI_Exec();
+  return true;
 }
 
 int32_t STemWinWindowManager::CreateButton(
